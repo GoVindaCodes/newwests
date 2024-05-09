@@ -93,13 +93,14 @@ const ProductDrawer = ({ id, currency }) => {
       {/* testing */}
       {/* <h1>hi</h1> */}
       {/* testing */}
+
       <Modal
         open={openModal}
         onClose={onCloseModal}
         center
         closeIcon={
           <div className="absolute top-0 right-0 text-red-500 focus:outline-none active:outline-none text-xl border-0">
-            <FiX className="text-3xl" />
+            {/* <FiX className="text-3xl" /> */}
           </div>
         }
       >
@@ -111,7 +112,6 @@ const ProductDrawer = ({ id, currency }) => {
           />
         </div>
       </Modal>
-
       <div className="w-full relative p-6 border-b border-gray-100 bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
         {id ? (
           <Title
@@ -166,12 +166,17 @@ const ProductDrawer = ({ id, currency }) => {
                 <LabelArea label={t("ProductID")} />
                 <div className="col-span-8 sm:col-span-4">{productId}</div>
               </div> */}
+
               <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
                 <LabelArea label={t("ProductTitleName")} />
                 <div className="col-span-8 sm:col-span-4">
                   <Input
                     {...register(`title`, {
                       required: "TItle is required!",
+                      maxLength: {
+                        value: 25,
+                        message: "Title cannot exceed 25 characters.",
+                      },
                     })}
                     className="border h-12 text-sm focus:outline-none block w-full bg-gray-100 dark:bg-white border-transparent focus:bg-white"
                     name="title"
@@ -182,6 +187,23 @@ const ProductDrawer = ({ id, currency }) => {
                   <Error errorName={errors.title} />
                 </div>
               </div>
+
+              <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
+                <LabelArea label={t("ProductSKU")} />
+                <div className="col-span-8 sm:col-span-4">
+                  <InputArea
+                    register={register}
+                    required="false"
+                    label={t("ProductSKU")}
+                    name="sku"
+                    type="text"
+                    placeholder={t("ProductSKU")}
+                    maxLength={5}
+                  />
+                  <Error errorName={errors.sku} />
+                </div>
+              </div>
+
               <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
                 <LabelArea label={t("ProductDescription")} />
                 <div className="col-span-8 sm:col-span-4">
@@ -202,15 +224,19 @@ const ProductDrawer = ({ id, currency }) => {
                 <LabelArea label={t("ProductImage")} />
                 <div className="col-span-8 sm:col-span-4">
                   <Uploader
+                    // works finee now after commenting the product words here
                     product
                     imageUrl={imageUrl}
                     setImageUrl={setImageUrl}
+                    name="image"
                     folder="product"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
+              {/* testers requirements asked to remove it  and place it below the titles for now*/}
+
+              {/* <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
                 <LabelArea label={t("ProductSKU")} />
                 <div className="col-span-8 sm:col-span-4">
                   <InputArea
@@ -220,10 +246,11 @@ const ProductDrawer = ({ id, currency }) => {
                     name="sku"
                     type="text"
                     placeholder={t("ProductSKU")}
+                    maxLength={5}
                   />
                   <Error errorName={errors.sku} />
                 </div>
-              </div>
+              </div> */}
 
               <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
                 <LabelArea label={t("ProductBarcode")} />
@@ -235,6 +262,7 @@ const ProductDrawer = ({ id, currency }) => {
                     name="barcode"
                     type="text"
                     placeholder={t("ProductBarcode")}
+                    maxLength={5}
                   />
                   <Error errorName={errors.barcode} />
                 </div>
@@ -278,7 +306,7 @@ const ProductDrawer = ({ id, currency }) => {
                   <InputValue
                     register={register}
                     maxValue={2000}
-                    minValue={1}
+                    minValue={0}
                     label="Original Price"
                     name="originalPrice"
                     type="number"
@@ -319,7 +347,7 @@ const ProductDrawer = ({ id, currency }) => {
                     minValue={0}
                     // defaultValue={0}
                     label="Quantity"
-                    name="stock"
+                    name="quantity"
                     type="number"
                     placeholder={t("ProductQuantity")}
                   />
@@ -327,7 +355,9 @@ const ProductDrawer = ({ id, currency }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
+              {/* testers requirements asked to remove it  */}
+
+              {/* <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
                 <LabelArea label={t("ProductSlug")} />
                 <div className="col-span-8 sm:col-span-4">
                   <Input
@@ -343,7 +373,7 @@ const ProductDrawer = ({ id, currency }) => {
                   />
                   <Error errorName={errors.slug} />
                 </div>
-              </div>
+              </div> */}
 
               <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
                 <LabelArea label={t("ProductTag")} />

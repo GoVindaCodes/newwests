@@ -21,7 +21,7 @@ const AttributeListTable = ({
   handleSelectInlineImage,
 }) => {
   const { t } = useTranslation();
-
+  console.log("hi", variantTitle)
   return (
     <>
       <TableBody>
@@ -87,7 +87,14 @@ const AttributeListTable = ({
 
                 {variant.productId && (
                   <span className="text-xs productId text-gray-500">
-                    ({variant.productId})
+                    {/* ({variant.productId}) */}
+                    {variantTitle?.map((hi, index) => (
+                      <div key={index}>
+                        <span>{hi.name.en}: </span>
+                        <span>{hi.variants[0]?.name.en}</span>
+                      </div>
+                    ))}
+
                   </span>
                 )}
               </div>
