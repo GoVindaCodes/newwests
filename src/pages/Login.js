@@ -9,12 +9,14 @@ import ImageDark from "assets/img/login-office-dark.jpeg";
 import useLoginSubmit from "../hooks/useLoginSubmit";
 import { AdminContext } from 'context/AdminContext';
 import { useHistory, useLocation } from 'react-router-dom';
-import { notifySuccess } from "utils/toast";
+import { notifyError, notifySuccess } from "utils/toast";
 import { Link } from "@react-pdf/renderer";
 import { ImFacebook, ImGoogle } from "react-icons/im";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth"; // Import specific methods and objects
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import FacebookLogin from 'react-facebook-login';
+import { FacebookAuthProvider } from "firebase/auth";
 
 const Login = () => {
   const { t } = useTranslation();
@@ -46,16 +48,40 @@ const Login = () => {
   const auth = getAuth();
 
   const handleGoogleSignIn = async () => {
-    console.log("hi:")
     try {
       const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      console.log("Google sign-in successful:", user);
+      notifySuccess('Logged in successfully');
+      dispatch({
+        type: 'USER_LOGIN', payload: {
+          token: user.accessToken
+        }
+      });
+      localStorage.setItem("email", user.email)
+      history.replace('/');
     } catch (error) {
-      // Handle errors
       console.error('Google sign-in error:', error);
+      notifyError('Failed to sign in with Google');
     }
   };
 
+
+
+  const handleFacebookSignIn = async () => {
+    try {
+      const provider = new FacebookAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      console.log("Facebook sign-in successful:", user);
+      notifySuccess('Logged in successfully');
+      history.replace('/');
+    } catch (error) {
+      console.error('Facebook sign-in error:', error);
+      notifyError('Failed to sign in with Facebook');
+    }
+  };
 
   // Added By : Govinda 
 
@@ -137,12 +163,20 @@ const Login = () => {
                   </Button>
                   <hr className="my-10" />
                   <button
+                    className="text-sm inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-serif text-center justify-center rounded-md focus:outline-none text-gray-700 bg-gray-100 shadow-sm my-2  md:px-2 lg:px-3 py-4 md:py-3.5 lg:py-4 hover:text-white hover:bg-red-500 h-11 md:h-12 w-full"
+                    onClick={handleFacebookSignIn}
+                  >
+                    <ImFacebook className="w-4 h-4 mr-2" />{" "}
+                    <span className="ml-2">{t("LoginWithFacebook")}</span>
+                  </button>
+
+                  {/* <button
                     // disabled
                     className="text-sm inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-serif text-center justify-center rounded-md focus:outline-none text-gray-700 bg-gray-100 shadow-sm my-2 md:px-2 lg:px-3 py-4 md:py-3.5 lg:py-4 hover:text-white hover:bg-blue-600 h-11 md:h-12 w-full mr-2"
                   >
                     <ImFacebook className="w-4 h-4 mr-2" />{" "}
                     <span className="ml-2"> {t("LoginWithFacebook")} </span>
-                  </button>
+                  </button> */}
                   <button
                     // disabled
                     className="text-sm inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-serif text-center justify-center rounded-md focus:outline-none text-gray-700 bg-gray-100 shadow-sm my-2  md:px-2 lg:px-3 py-4 md:py-3.5 lg:py-4 hover:text-white hover:bg-red-500 h-11 md:h-12 w-full"
@@ -197,6 +231,4 @@ const Login = () => {
 };
 
 export default Login;
-
-
 
